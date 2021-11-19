@@ -45,4 +45,3 @@ FROM access_log;
 -- | 2016-08-26 12:02:01 | http://www.example.com/video#ref           | /video        | NULL |
 -- | 2016-08-26 12:02:01 | http://www.example.com/book/detail?id=002  | /book/detail  | 002  |
 -- +---------------------+--------------------------------------------+---------------+------+
-
