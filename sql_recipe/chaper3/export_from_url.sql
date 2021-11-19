@@ -45,3 +45,20 @@ FROM access_log;
 -- | 2016-08-26 12:02:01 | http://www.example.com/video#ref           | /video        | NULL |
 -- | 2016-08-26 12:02:01 | http://www.example.com/book/detail?id=002  | /book/detail  | 002  |
 -- +---------------------+--------------------------------------------+---------------+------+
+
+/*
+-- 문자열을 배열로 분해
+*/
+SELECT
+  stamp
+  , url
+  , REGEXP_SUBSTR(REGEXP_REPLACE(REGEXP_SUBSTR(url, '//[^/]+([^?#]+)'), '//[^/]+', ''), '[^/]+', 1, 1) AS path1
+  , REGEXP_SUBSTR(REGEXP_REPLACE(REGEXP_SUBSTR(url, '//[^/]+([^?#]+)'), '//[^/]+', ''), '[^/]+', 1, 2) AS path2
+FROM access_log;
+-- +---------------------+--------------------------------------------+-------+--------+
+-- | stamp               | url                                        | path1 | path2  |
+-- +---------------------+--------------------------------------------+-------+--------+
+-- | 2016-08-26 12:02:00 | http://www.example.com/video/detail?id=001 | video | detail |
+-- | 2016-08-26 12:02:01 | http://www.example.com/video#ref           | video | NULL   |
+-- | 2016-08-26 12:02:01 | http://www.example.com/book/detail?id=002  | book  | detail |
+-- +---------------------+--------------------------------------------+-------+--------+
