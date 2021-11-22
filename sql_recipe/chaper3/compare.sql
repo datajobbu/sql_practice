@@ -103,3 +103,31 @@ ORDER BY
 -- | 2016 | 82750.0000 |
 -- | 2017 | 43250.0000 |
 -- +------+------------+
+
+/*
+-- 분기별 평균 매출(3)
+-- NULL 포함 사칙연산 처리2*/
+SELECT
+    year
+    , (COALESCE(q1, 0) 
+       + COALESCE(q2, 0) 
+       + COALESCE(q3, 0) 
+       + COALESCE(q4, 0)
+      ) 
+     / (SIGN(COALESCE(q1, 0))
+       + SIGN(COALESCE(q2, 0))
+       + SIGN(COALESCE(q3, 0))
+       + SIGN(COALESCE(q4, 0))
+     ) AS average
+FROM
+    quarterly_sales
+ORDER BY
+    year
+;
+-- +------+------------+
+-- | year | average    |
+-- +------+------------+
+-- | 2015 | 81500.0000 |
+-- | 2016 | 82750.0000 |
+-- | 2017 | 86500.0000 |
+-- +------+------------+
