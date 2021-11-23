@@ -54,3 +54,31 @@ FROM
 -- | U002    | 2021-11-23 | 2016-02-29    |     50894 |
 -- | U003    | 2021-11-23 | 2016-03-01    |     50822 |
 -- +---------+------------+---------------+-----------+
+
+/* 나이 계산
+-- 미들웨어에 따라 표현의 차이가 커서
+-- 수치 또는 문자열로 계산하는 것이 좋음 */
+SELECT
+    user_id
+    , SUBSTRING(register_stamp, 1, 10) AS register_date
+    , birth_date
+    , FLOOR(
+        ( CAST(REPLACE(SUBSTRING(register_stamp, 1, 10), '-', '') AS SIGNED)
+          - CAST(REPLACE(birth_date, '-', '') AS SIGNED)
+        ) / 10000
+     ) AS register_age
+    , FLOOR(
+        ( CAST(REPLACE(CAST(CURRENT_DATE AS CHAR), '-', '') AS SIGNED)
+          - CAST(REPLACE(birth_date, '-', '') AS SIGNED)
+        ) / 10000
+     ) AS current_age
+FROM
+    mst_users_with_dates
+;
+-- +---------+---------------+------------+--------------+-------------+
+-- | user_id | register_date | birth_date | register_age | current_age |
+-- +---------+---------------+------------+--------------+-------------+
+-- | U001    | 2016-02-28    | 2000-02-29 |           15 |          21 |
+-- | U002    | 2016-02-29    | 2000-02-29 |           16 |          21 |
+-- | U003    | 2016-03-01    | 2000-02-29 |           16 |          21 |
+-- +---------+---------------+------------+--------------+-------------+
