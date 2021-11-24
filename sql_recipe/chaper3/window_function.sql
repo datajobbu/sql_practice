@@ -65,3 +65,44 @@ FROM
 WINDOW
     w AS (ORDER BY score DESC)
 ;
+
+/* 
+-- WINDOW + ORDER BY + DESCRIBE
+*/
+SELECT
+    product_id
+    , score
+    , ROW_NUMBER() OVER(ORDER BY score DESC) AS 'row'
+    , SUM(score)
+        OVER(ORDER BY score DESC
+             ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+      AS cum_score
+    , AVG(score)
+        OVER(ORDER BY score DESC
+             ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
+      AS local_avg
+    , FIRST_VALUE(product_id)
+        OVER(ORDER BY score DESC
+             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+      AS 'first_value'
+    , LAST_VALUE(product_id)
+        OVER(ORDER BY score DESC
+             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+      AS 'last_value'
+FROM
+    popular_products
+ORDER BY
+    'row'
+;
+-- +------------+-------+-----+-----------+-----------+-------------+------------+
+-- | product_id | score | row | cum_score | local_avg | first_value | last_value |
+-- +------------+-------+-----+-----------+-----------+-------------+------------+
+-- | A001       |    94 |   1 |        94 |   92.0000 | A001        | D004       |
+-- | D001       |    90 |   2 |       184 |   88.6667 | A001        | D004       |
+-- | D002       |    82 |   3 |       266 |   84.3333 | A001        | D004       |
+-- | A002       |    81 |   4 |       347 |   80.3333 | A001        | D004       |
+-- | A003       |    78 |   5 |       425 |   79.0000 | A001        | D004       |
+-- | D003       |    78 |   6 |       503 |   73.3333 | A001        | D004       |
+-- | A004       |    64 |   7 |       567 |   66.6667 | A001        | D004       |
+-- | D004       |    58 |   8 |       625 |   61.0000 | A001        | D004       |
+-- +------------+-------+-----+-----------+-----------+-------------+------------+
