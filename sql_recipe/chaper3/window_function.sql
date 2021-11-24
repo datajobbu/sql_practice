@@ -106,3 +106,13 @@ ORDER BY
 -- | A004       |    64 |   7 |       567 |   66.6667 | A001        | D004       |
 -- | D004       |    58 |   8 |       625 |   61.0000 | A001        | D004       |
 -- +------------+-------+-----+-----------+-----------+-------------+------------+
+
+/* WINDOW FUNCTION + DESCRIBE 추가 설명
+-- 윈도우 프레임 지정자 종류:
+--     * ROWS BETWEEN {start} AND {end}
+--     - {start & end}: 
+--          - 'CURRENT ROW': 현재의 행
+--          - '{n} PRECEDING', '{n} FOLLOWING': n 행 앞, 뒤
+--          - 'UNBOUNDED PRECEDING': 이전 행 전부
+--          - 'UNBOUNDED FOLLOWING': 이후 행 전부 
+*/
