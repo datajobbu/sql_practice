@@ -48,3 +48,20 @@ ORDER BY
 -- | A004       |    64 |   7 |    7 |     6 | D003 | A003 | D004  | NULL  |
 -- | D004       |    58 |   8 |    8 |     7 | A004 | D003 | NULL  | NULL  |
 -- +------------+-------+-----+------+-------+------+------+-------+-------+
+
+-- 같은 결과를 내는 쿼리
+SELECT
+    product_id
+    , score
+    , ROW_NUMBER() OVER w AS 'row'
+    , RANK() OVER w AS 'rank'
+    , DENSE_RANK() OVER w AS 'dense'
+    , LAG(product_id) OVER w AS 'lag1'
+    , LAG(product_id, 2) OVER w AS 'lag2'
+    , LEAD(product_id) OVER w AS 'lead1'
+    , LEAD(product_id, 2) OVER w AS 'lead2'
+FROM
+    popular_products
+WINDOW
+    w AS (ORDER BY score DESC)
+;
