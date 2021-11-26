@@ -171,3 +171,21 @@ ORDER BY
 -- | drama    | D001       |    90 |        1 |
 -- | drama    | D002       |    82 |        2 |
 -- +----------+------------+-------+----------+
+
+/*
+-- WINDOW - Top1: FIRST_VALUE()
+*/
+SELECT DISTINCT
+    category
+    , FIRST_VALUE(product_id) OVER(PARTITION BY category ORDER BY score DESC
+                                   ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+      AS product_id
+FROM
+    popular_products
+;
+-- +----------+------------+
+-- | category | product_id |
+-- +----------+------------+
+-- | action   | A001       |
+-- | drama    | D001       |
+-- +----------+------------+
