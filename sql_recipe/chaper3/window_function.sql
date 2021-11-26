@@ -116,3 +116,31 @@ ORDER BY
 --          - 'UNBOUNDED PRECEDING': 이전 행 전부
 --          - 'UNBOUNDED FOLLOWING': 이후 행 전부 
 */
+
+/*
+-- Partition By + Order By
+*/
+SELECT
+    category
+    , product_id
+    , score
+    , ROW_NUMBER() OVER(PARTITION BY category ORDER BY score DESC) AS 'row'
+    , RANK() OVER(PARTITION BY category ORDER BY score DESC) AS 'rank'
+    , DENSE_RANK() OVER(PARTITION BY category ORDER BY score DESC) AS 'dense_rank'
+FROM
+    popular_products
+ORDER BY
+    category, 'row'
+;
+-- +----------+------------+-------+-----+------+------------+
+-- | category | product_id | score | row | rank | dense_rank |
+-- +----------+------------+-------+-----+------+------------+
+-- | action   | A001       |    94 |   1 |    1 |          1 |
+-- | action   | A002       |    81 |   2 |    2 |          2 |
+-- | action   | A003       |    78 |   3 |    3 |          3 |
+-- | action   | A004       |    64 |   4 |    4 |          4 |
+-- | drama    | D001       |    90 |   1 |    1 |          1 |
+-- | drama    | D002       |    82 |   2 |    2 |          2 |
+-- | drama    | D003       |    78 |   3 |    3 |          3 |
+-- | drama    | D004       |    58 |   4 |    4 |          4 |
+-- +----------+------------+-------+-----+------+------------+
