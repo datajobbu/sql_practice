@@ -37,3 +37,35 @@ ORDER BY
 -- | 2017-01-01 |        1800 |      500 |   200 |
 -- | 2017-01-02 |        2000 |      700 |   250 |
 -- +------------+-------------+----------+-------+
+
+DROP TABLE IF EXISTS purchase_detail_log;
+CREATE TABLE purchase_detail_log (
+    purchase_id integer
+  , product_id  varchar(255)
+  , price       integer
+);
+
+INSERT INTO purchase_detail_log
+VALUES
+    (100001, 'A001', 3000)
+  , (100001, 'A002', 4000)
+  , (100001, 'A003', 2000)
+  , (100002, 'D001', 5000)
+  , (100002, 'D002', 3000)
+  , (100003, 'A001', 3000)
+;
+
+/*
+-- Aggregate Row to Col
+*/
+SELECT
+    purchase_id
+    , GROUP_CONCAT(product_id, ',') AS product_ids
+    , SUM(price) AS amount
+FROM
+    purchase_detail_log
+GROUP BY
+    purchase_id
+ORDER BY
+    purchase_id
+;
