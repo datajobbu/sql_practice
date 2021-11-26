@@ -144,3 +144,30 @@ ORDER BY
 -- | drama    | D003       |    78 |   3 |    3 |          3 |
 -- | drama    | D004       |    58 |   4 |    4 |          4 |
 -- +----------+------------+-------+-----+------+------------+
+
+/*
+-- WINDOW + SUBQUERY
+*/
+SELECT * 
+FROM (
+    SELECT
+        category
+        , product_id
+        , score
+        , ROW_NUMBER() OVER(PARTITION BY category ORDER BY score DESC) AS new_rank
+    FROM
+        popular_products
+) AS popular_products_with_rank
+WHERE
+    new_rank <= 2
+ORDER BY
+    category, new_rank
+;
+-- +----------+------------+-------+----------+
+-- | category | product_id | score | new_rank |
+-- +----------+------------+-------+----------+
+-- | action   | A001       |    94 |        1 |
+-- | action   | A002       |    81 |        2 |
+-- | drama    | D001       |    90 |        1 |
+-- | drama    | D002       |    82 |        2 |
+-- +----------+------------+-------+----------+
