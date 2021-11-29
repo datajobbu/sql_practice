@@ -57,7 +57,7 @@ VALUES
 
 /*
 -- Aggregate Row to Col
-*/
+-- 왜 결과 다른지 확인 필요 */
 SELECT
     purchase_id
     , GROUP_CONCAT(product_id, ',') AS product_ids
@@ -69,3 +69,10 @@ GROUP BY
 ORDER BY
     purchase_id
 ;
+-- +-------------+-------------------+--------+
+-- | purchase_id | product_ids       | amount |
+-- +-------------+-------------------+--------+
+-- |      100001 | A001,,A002,,A003, |   9000 |
+-- |      100002 | D001,,D002,       |   8000 |
+-- |      100003 | A001,             |   3000 |
+-- +-------------+-------------------+--------+
