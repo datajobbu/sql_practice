@@ -105,3 +105,24 @@ SELECT
 -- +--------+--------+--------+
 -- | A001   | A002   | A003   |
 -- +--------+--------+--------+
+
+/*
+-- Products Count from String
+*/
+SELECT
+    purchase_id
+    , product_ids
+    , 1
+      + CHAR_LENGTH(product_ids)
+      - CHAR_LENGTH(REPLACE(product_ids, ',', ''))
+      AS product_cnt
+FROM
+    purchase_log
+;
+-- +-------------+----------------+-------------+
+-- | purchase_id | product_ids    | product_cnt |
+-- +-------------+----------------+-------------+
+-- |      100001 | A001,A002,A003 |           3 |
+-- |      100002 | D001,D002      |           2 |
+-- |      100003 | A001           |           1 |
+-- +-------------+----------------+-------------+
