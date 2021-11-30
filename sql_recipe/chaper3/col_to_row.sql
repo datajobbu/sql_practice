@@ -126,3 +126,34 @@ FROM
 -- |      100002 | D001,D002      |           2 |
 -- |      100003 | A001           |           1 |
 -- +-------------+----------------+-------------+
+
+/*
+RESHAPE - STRING to COLUMN BY PIVOT TABLE
+*/
+SELECT
+    l.purchase_id
+    , l.product_ids
+    , p.idx
+    , REGEXP_SUBSTR(l.product_ids, '[^,]+', 1, p.idx) AS product_id
+FROM
+    purchase_log AS l
+    JOIN (
+        SELECT 1 AS idx
+        UNION ALL SELECT 2 AS idx
+        UNION ALL SELECT 3 AS idx
+    ) AS p
+    ON p.idx <= (1 + CHAR_LENGTH(l.product_ids)
+                   - CHAR_LENGTH(REPLACE(l.product_ids, ',', '')))
+ORDER BY
+    l.purchase_id
+;
+-- +-------------+----------------+-----+------------+
+-- | purchase_id | product_ids    | idx | product_id |
+-- +-------------+----------------+-----+------------+
+-- |      100001 | A001,A002,A003 |   1 | A001       |
+-- |      100001 | A001,A002,A003 |   2 | A002       |
+-- |      100001 | A001,A002,A003 |   3 | A003       |
+-- |      100002 | D001,D002      |   1 | D001       |
+-- |      100002 | D001,D002      |   2 | D002       |
+-- |      100003 | A001           |   1 | A001       |
+-- +-------------+----------------+-----+------------+
