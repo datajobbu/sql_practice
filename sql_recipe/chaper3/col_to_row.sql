@@ -91,3 +91,17 @@ FROM (
 -- |   2 |
 -- |   3 |
 -- +-----+
+
+/*
+-- Example of SPLIT_PART
+-- MySQL: REGEXP_SUBSTR() */
+SELECT
+    REGEXP_SUBSTR('A001,A002,A003', '[^,]+', 1, 1) AS part_1
+    , REGEXP_SUBSTR('A001,A002,A003', '[^,]+', 1, 2) AS part_2
+    , REGEXP_SUBSTR('A001,A002,A003', '[^,]+', 1, 3) AS part_3
+;
+-- +--------+--------+--------+
+-- | part_1 | part_2 | part_3 |
+-- +--------+--------+--------+
+-- | A001   | A002   | A003   |
+-- +--------+--------+--------+
