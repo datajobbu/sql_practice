@@ -72,3 +72,22 @@ ORDER BY
 -- | 2017 | q3      |  NULL |
 -- | 2017 | q4      |  NULL |
 -- +------+---------+-------+
+
+/*
+-- Table With Serial Number
+*/
+SELECT
+    *
+FROM (
+    SELECT 1 AS idx
+    UNION ALL SELECT 2 AS idx
+    UNION ALL SELECT 3 AS idx
+) AS pivot
+;
+-- +-----+
+-- | idx |
+-- +-----+
+-- |   1 |
+-- |   2 |
+-- |   3 |
+-- +-----+
