@@ -125,3 +125,29 @@ FROM
 -- |           2 | cd   | 500000 | C002         |
 -- |           2 | cd   | 500000 | C003         |
 -- +-------------+------+--------+--------------+
+
+/*
+-- Concat Horizonal wtih TOP 1 item
+-- LEFT JOIN */
+SELECT
+    m.category_id
+    , m.name
+    , s.sales
+    , r.product_id AS top_sale_product
+FROM
+    mst_categories AS m
+    LEFT JOIN
+        category_sales AS s
+        ON m.category_id = s.category_id
+    LEFT JOIN
+        product_sale_ranking AS r
+        ON m.category_id = r.category_id
+        AND r.ranks = 1
+;
+-- +-------------+------+--------+------------------+
+-- | category_id | name | sales  | top_sale_product |
+-- +-------------+------+--------+------------------+
+-- |           1 | dvd  | 850000 | D001             |
+-- |           2 | cd   | 500000 | C001             |
+-- |           3 | book |   NULL | NULL             |
+-- +-------------+------+--------+------------------+
