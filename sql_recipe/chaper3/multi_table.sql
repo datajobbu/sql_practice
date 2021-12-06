@@ -127,7 +127,7 @@ FROM
 -- +-------------+------+--------+--------------+
 
 /*
--- Concat Horizonal wtih TOP 1 item
+-- Concat Horizonal with TOP 1 item
 -- LEFT JOIN */
 SELECT
     m.category_id
@@ -143,6 +143,33 @@ FROM
         product_sale_ranking AS r
         ON m.category_id = r.category_id
         AND r.ranks = 1
+;
+-- +-------------+------+--------+------------------+
+-- | category_id | name | sales  | top_sale_product |
+-- +-------------+------+--------+------------------+
+-- |           1 | dvd  | 850000 | D001             |
+-- |           2 | cd   | 500000 | C001             |
+-- |           3 | book |   NULL | NULL             |
+-- +-------------+------+--------+------------------+
+
+/*
+-- As Subquery
+*/
+SELECT
+    m.category_id
+    , m.name
+    , (SELECT s.sales
+       FROM category_sales AS s
+       WHERE m.category_id = s.category_id
+      ) AS sales
+    , (SELECT r.product_id
+       FROM product_sale_ranking AS r
+       WHERE m.category_id = r.category_id
+       ORDER BY sales DESC
+       LIMIT 1
+      ) AS top_sale_product
+FROM
+    mst_categories AS m
 ;
 -- +-------------+------+--------+------------------+
 -- | category_id | name | sales  | top_sale_product |
