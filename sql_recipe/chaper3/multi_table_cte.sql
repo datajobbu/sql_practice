@@ -115,3 +115,32 @@ ORDER BY
 -- |     3 | D003 |     10000 | C003 |    10000 | B003 |      10000 |
 -- |     4 | NULL |      NULL | NULL |     NULL | B004 |       5000 |
 -- +-------+------+-----------+------+----------+------+------------+
+
+/*
+-- Pseudo Table
+-- CTE WITH JOIN */
+WITH
+    mst_devices AS (
+        SELECT 1 AS device_id, 'PC' AS device_name
+        UNION ALL
+        SELECT 2 AS device_id, 'SP' AS device_name
+        UNION ALL
+        SELECT 3 AS device_id, 'APP' AS device_name
+    )
+
+SELECT
+    u.user_id
+    , d.device_name
+FROM
+    mst_users AS u
+    LEFT JOIN
+        mst_devices AS d
+        ON u.register_device = d.device_id
+;
+-- +---------+-------------+
+-- | user_id | device_name |
+-- +---------+-------------+
+-- | U001    | PC          |
+-- | U002    | SP          |
+-- | U003    | APP         |
+-- +---------+-------------+
